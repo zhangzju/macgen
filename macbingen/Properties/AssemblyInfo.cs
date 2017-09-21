@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("macbingen")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("All rights reserved by TP-Link(CHN) CO.Ltd")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("TP-Link")]
 [assembly: AssemblyProduct("Mac.bin generator")]
