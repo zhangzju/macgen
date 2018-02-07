@@ -10,13 +10,10 @@ using System.Windows.Forms;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.IO;
-
 namespace macbingen
 {
     public partial class Form1 : Form
     {
-        static bool isPin;
-        static decimal pinLength;
         static bool isUsername;
         static decimal usernameLength;
         static bool isPassword;
@@ -37,8 +34,6 @@ namespace macbingen
         public Form1()
         {
             InitializeComponent();
-            this.numericUpDown1.Enabled = false;
-            this.numericUpDown1.Value = 8;
             this.numericUpDown2.Enabled = false;
             this.numericUpDown2.Value = 8;
             this.numericUpDown3.Enabled = false;
@@ -53,8 +48,6 @@ namespace macbingen
 
         private void button2_Click(object sender, EventArgs e)
         {
-            isPin = this.checkBox1.Checked;
-            pinLength = this.numericUpDown1.Value;
             isUsername = this.checkBox2.Checked;
             usernameLength = this.numericUpDown2.Value;
             isPassword = this.checkBox3.Checked;
@@ -66,8 +59,7 @@ namespace macbingen
             count = this.numericUpDown6.Value;
 
             titleList.Add("MAC Address");
-            titleList.Add("PIN");
-            titleList.Add("Username");
+             titleList.Add("Username");
             titleList.Add("Password");
             titleList.Add("WirelessKey");
             titleList.Add("PPPoE Username");
@@ -102,15 +94,7 @@ namespace macbingen
             for (decimal index = 0; index < count; index++)
             {
                 row = sheet.CreateRow(Convert.ToInt32(index) + 1);
-
-                if(isPin)
-                {
-                    cell = row.CreateCell(1);
-                    pin = getRandomizer(Convert.ToInt32(pinLength), true, false, false, false);
-                    cell.SetCellValue(pin);
-                    pinList.Add(pin);
-                }
-                
+              
                 if(isUsername)
                 {
                     cell = row.CreateCell(2);
@@ -138,15 +122,21 @@ namespace macbingen
                 if(true)
                 {
                     cell = row.CreateCell(15);
-                    cell.SetCellValue("0");
+                    cell.SetCellValue(0);
                 }
             }
 
+            if(File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
 
             FileStream sw = File.Create(filePath);
             workbook.Write(sw);
-            MessageBox.Show("Generate success! All file is in" + filePath);
+            
             sw.Close();
+            MessageBox.Show("Generate success in" + filePath);
+
         }
 
         public string getRandomPin(int length)
@@ -161,8 +151,8 @@ namespace macbingen
 
             int pinTemp = Convert.ToInt32(pin[0]) * 3 + Convert.ToInt32(pin[1]) * 1 + Convert.ToInt32(pin[2]) * 3 + Convert.ToInt32(pin[3]) * 1 + Convert.ToInt32(pin[4]) * 3 + Convert.ToInt32(pin[5]) * 1 + Convert.ToInt32(pin[6]) * 3;
 
-
-
+            pin = pin + Convert.ToString(pinTemp%10);
+            //MessageBox.Show(pin + ";" + Convert.ToString(pinTemp % 10));
             return pin;
         }
 
@@ -208,18 +198,6 @@ namespace macbingen
             AboutBox1 about = new AboutBox1();
             about.Text = "TP-Link ISP MACBIN generator";
             about.Show();
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if(this.checkBox1.Checked)
-            {
-                this.numericUpDown1.Enabled = true;
-            }
-            else
-            {
-                this.numericUpDown1.Enabled = false;
-            }
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -308,9 +286,9 @@ namespace macbingen
                     index++;
                 }
 
-                if (!Directory.Exists(Application.StartupPath+"\\output"))
+                if (!Directory.Exists(Application.StartupPath+"/output"))
                 {
-                    Directory.CreateDirectory(Application.StartupPath + "\\output");
+                    Directory.CreateDirectory(Application.StartupPath + "/output");
                 }
 
                 for(index=1; index < Convert.ToInt32(count);index++)
@@ -319,7 +297,7 @@ namespace macbingen
 
                     ICell cell = row.GetCell(0);
                     macAddress = cell.ToString();
-                    macbinPath = Application.StartupPath+"\\output\\"+macAddress+".bin";
+                    macbinPath = Application.StartupPath+"/output/"+macAddress+".bin";
 
                     if (string.IsNullOrWhiteSpace(macAddress))
                     {
@@ -435,7 +413,7 @@ namespace macbingen
                         string flag = cell.ToString();
                         if (Convert.ToInt32(flag) == 0)
                         {
-                            cell.SetCellValue("1");
+                            cell.SetCellValue(1);
                             //MessageBox.Show(cell.ToString());
                         }
                         else if (flag == "1")
@@ -452,6 +430,7 @@ namespace macbingen
                 MessageBox.Show("Generate success! All file is in"+Application.StartupPath+"\\output");
 
             }  
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
