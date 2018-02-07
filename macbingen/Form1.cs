@@ -89,7 +89,6 @@ namespace macbingen
                 tempcount++;
             }
 
-            string pin;
             
             for (decimal index = 0; index < count; index++)
             {
@@ -250,186 +249,203 @@ namespace macbingen
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string outputpath = Application.StartupPath + "/output";
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.Description = "MAC.bin output path";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                outputpath = dialog.SelectedPath + @"\Output";
+            }
+            this.textBox2.Text = outputpath;
             //MessageBox.Show(filePath + ";" + count.ToString());
             IWorkbook workbook = null;
-            using (FileStream fs = File.Open(filePath, FileMode.Open,FileAccess.Read, FileShare.ReadWrite))
+            try
             {
-                count = 0;
-                //把xls文件读入workbook变量里，之后就可以关闭了  
-                workbook = new XSSFWorkbook(fs);
-                fs.Close();
-
-                ISheet sheet = workbook.GetSheet("CONFIG INFO");
-
-                int index = 0;
-                string macAddress;
-                string macbinPath;
-                string pin;
-                string username;
-                string password;
-                string wirelesskey;
-                string pppoeusername;
-                string pppoepassword;
-                string ipaddress;
-                string mask;
-                string gateway;
-                string dns;
-                string ssid2;
-                string ssid2guest;
-                string ssid5;
-                string ssid5guest;
-
-                
-                while(sheet.GetRow(index) != null &&sheet.GetRow(index).GetCell(0)!=null && !string.IsNullOrEmpty(sheet.GetRow(index).GetCell(0).ToString()))
+                using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    count++;
-                    index++;
-                }
+                    count = 0;
+                    //把xls文件读入workbook变量里，之后就可以关闭了  
+                    workbook = new XSSFWorkbook(fs);
+                    fs.Close();
 
-                if (!Directory.Exists(Application.StartupPath+"/output"))
-                {
-                    Directory.CreateDirectory(Application.StartupPath + "/output");
-                }
+                    ISheet sheet = workbook.GetSheet("CONFIG INFO");
 
-                for(index=1; index < Convert.ToInt32(count);index++)
-                {
-                    IRow row = sheet.GetRow(index);
+                    int index = 0;
+                    string macAddress;
+                    string macbinPath;
+                    string pin;
+                    string username;
+                    string password;
+                    string wirelesskey;
+                    string pppoeusername;
+                    string pppoepassword;
+                    string ipaddress;
+                    string mask;
+                    string gateway;
+                    string dns;
+                    string ssid2;
+                    string ssid2guest;
+                    string ssid5;
+                    string ssid5guest;
 
-                    ICell cell = row.GetCell(0);
-                    macAddress = cell.ToString();
-                    macbinPath = Application.StartupPath+"/output/"+macAddress+".bin";
 
-                    if (string.IsNullOrWhiteSpace(macAddress))
+                    while (sheet.GetRow(index) != null && sheet.GetRow(index).GetCell(0) != null && !string.IsNullOrEmpty(sheet.GetRow(index).GetCell(0).ToString()))
                     {
-                        MessageBox.Show("Illegal mac address!");
+                        count++;
+                        index++;
                     }
 
-                    FileStream macbinStream = File.OpenWrite(macbinPath);
-                    StreamWriter writer = new StreamWriter(macbinStream);
-
-                    cell = row.GetCell(1);
-                    
-                    if (cell != null)
+                    if (!Directory.Exists(Application.StartupPath + "/output"))
                     {
-                        pin = cell.ToString();
-                        writer.WriteLine("pin:" + pin);
-                        //MessageBox.Show(pin);
+                        Directory.CreateDirectory(Application.StartupPath + "/output");
                     }
 
-                    cell = row.GetCell(2);
-                    if(cell != null)
+                    for (index = 1; index < Convert.ToInt32(count); index++)
                     {
-                        username = cell.ToString();
-                        writer.WriteLine("username:" + username);
-                    }
+                        IRow row = sheet.GetRow(index);
 
-                    cell = row.GetCell(3);
-                    if(cell != null)
-                    {
-                        password = cell.ToString();
-                        writer.WriteLine("password:" + password);
-                    }
+                        ICell cell = row.GetCell(0);
+                        macAddress = cell.ToString();
+                        macbinPath = Application.StartupPath + "/output/" + macAddress + ".bin";
 
-                    cell = row.GetCell(4);
-                    if (cell != null)
-                    {
-                        wirelesskey = cell.ToString();
-                        writer.WriteLine("wirelesskey:" + wirelesskey);
-                    }
-
-                    cell = row.GetCell(5);
-                    if (cell != null)
-                    {
-                        pppoeusername = cell.ToString();
-                        writer.WriteLine("PPPOE4_username:" + pppoeusername);
-                    }
-
-                    cell = row.GetCell(6);
-                    if (cell != null)
-                    {
-                        pppoepassword = cell.ToString();
-                        writer.WriteLine("PPPOE4_password:" + pppoepassword);
-                    }
-
-                    cell = row.GetCell(7);
-                    if (cell != null)
-                    {
-                        ipaddress = cell.ToString();
-                        writer.WriteLine("static_IP4:" + ipaddress);
-                    }
-
-                    cell = row.GetCell(8);
-                    if (cell != null)
-                    {
-                        mask = cell.ToString();
-                        writer.WriteLine("static_Mask4:" + mask);
-                    }
-
-                    cell = row.GetCell(9);
-                    if (cell != null)
-                    {
-                        gateway = cell.ToString();
-                        writer.WriteLine("static_GW4:" + gateway);
-                    }
-
-                    cell = row.GetCell(10);
-                    if (cell != null)
-                    {
-                        dns = cell.ToString();
-                        writer.WriteLine("static_DNS4:" + dns);
-                    }
-
-                    cell = row.GetCell(11);
-                    if (cell != null)
-                    {
-                        ssid2 = cell.ToString();
-                        writer.WriteLine("SSID_2G_0:" + ssid2);
-                    }
-
-                    cell = row.GetCell(12);
-                    if (cell != null)
-                    {
-                        ssid2guest = cell.ToString();
-                        writer.WriteLine("SSID_2G_1:" + ssid2guest);
-                    }
-
-                    cell = row.GetCell(13);
-                    if (cell != null)
-                    {
-                        ssid5 = cell.ToString();
-                        writer.WriteLine("SSID_5G_0:" + ssid5);
-                    }
-
-                    cell = row.GetCell(14);
-                    if (cell != null)
-                    {
-                        ssid5guest = cell.ToString();
-                        writer.WriteLine("SSID_5G_1:" + ssid5guest);
-                    }
-
-                    cell = row.GetCell(15);
-                    if (cell != null)
-                    {
-                        string flag = cell.ToString();
-                        if (Convert.ToInt32(flag) == 0)
+                        if (string.IsNullOrWhiteSpace(macAddress))
                         {
-                            cell.SetCellValue(1);
-                            //MessageBox.Show(cell.ToString());
+                            MessageBox.Show("Illegal mac address!");
                         }
-                        else if (flag == "1")
+
+                        FileStream macbinStream = File.OpenWrite(macbinPath);
+                        StreamWriter writer = new StreamWriter(macbinStream);
+
+                        cell = row.GetCell(1);
+
+                        if (cell != null)
                         {
-                            writer.Close();
-                            File.Delete(macbinPath);
-                            continue;
+                            pin = cell.ToString();
+                            writer.WriteLine("pin:" + pin);
+                            //MessageBox.Show(pin);
                         }
+
+                        cell = row.GetCell(2);
+                        if (cell != null)
+                        {
+                            username = cell.ToString();
+                            writer.WriteLine("username:" + username);
+                        }
+
+                        cell = row.GetCell(3);
+                        if (cell != null)
+                        {
+                            password = cell.ToString();
+                            writer.WriteLine("password:" + password);
+                        }
+
+                        cell = row.GetCell(4);
+                        if (cell != null)
+                        {
+                            wirelesskey = cell.ToString();
+                            writer.WriteLine("wirelesskey:" + wirelesskey);
+                        }
+
+                        cell = row.GetCell(5);
+                        if (cell != null)
+                        {
+                            pppoeusername = cell.ToString();
+                            writer.WriteLine("PPPOE4_username:" + pppoeusername);
+                        }
+
+                        cell = row.GetCell(6);
+                        if (cell != null)
+                        {
+                            pppoepassword = cell.ToString();
+                            writer.WriteLine("PPPOE4_password:" + pppoepassword);
+                        }
+
+                        cell = row.GetCell(7);
+                        if (cell != null)
+                        {
+                            ipaddress = cell.ToString();
+                            writer.WriteLine("static_IP4:" + ipaddress);
+                        }
+
+                        cell = row.GetCell(8);
+                        if (cell != null)
+                        {
+                            mask = cell.ToString();
+                            writer.WriteLine("static_Mask4:" + mask);
+                        }
+
+                        cell = row.GetCell(9);
+                        if (cell != null)
+                        {
+                            gateway = cell.ToString();
+                            writer.WriteLine("static_GW4:" + gateway);
+                        }
+
+                        cell = row.GetCell(10);
+                        if (cell != null)
+                        {
+                            dns = cell.ToString();
+                            writer.WriteLine("static_DNS4:" + dns);
+                        }
+
+                        cell = row.GetCell(11);
+                        if (cell != null)
+                        {
+                            ssid2 = cell.ToString();
+                            writer.WriteLine("SSID_2G_0:" + ssid2);
+                        }
+
+                        cell = row.GetCell(12);
+                        if (cell != null)
+                        {
+                            ssid2guest = cell.ToString();
+                            writer.WriteLine("SSID_2G_1:" + ssid2guest);
+                        }
+
+                        cell = row.GetCell(13);
+                        if (cell != null)
+                        {
+                            ssid5 = cell.ToString();
+                            writer.WriteLine("SSID_5G_0:" + ssid5);
+                        }
+
+                        cell = row.GetCell(14);
+                        if (cell != null)
+                        {
+                            ssid5guest = cell.ToString();
+                            writer.WriteLine("SSID_5G_1:" + ssid5guest);
+                        }
+
+                        cell = row.GetCell(15);
+                        if (cell != null)
+                        {
+                            string flag = cell.ToString();
+                            if (Convert.ToInt32(flag) == 0)
+                            {
+                                cell.SetCellValue(1);
+                                //MessageBox.Show(cell.ToString());
+                            }
+                            else if (flag == "1")
+                            {
+                                writer.Close();
+                                File.Delete(macbinPath);
+                                continue;
+                            }
+                        }
+
+                        writer.Close();
                     }
 
-                    writer.Close();
+                    MessageBox.Show("Generate success! All file is in" + outputpath);
                 }
+            }
+            catch (Exception error)
+            {
 
-                MessageBox.Show("Generate success! All file is in"+Application.StartupPath+"\\output");
+                Console.WriteLine(error.Message); //输出错误提示
+            }
 
-            }  
+         
 
         }
 
