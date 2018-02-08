@@ -23,7 +23,7 @@ namespace macbingen
         static bool isPppoePassword;
         static decimal pppoePasswordLength;
         static decimal count;
-        static string filePath = Application.StartupPath + "\\MACBIN.xlsx";
+        static string filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)+ @"\MACBIN.xlsx";
         static List<string> titleList = new List<string>();
         static List<string> pinList = new List<string>();
         static List<string> usernameList = new List<string>();
@@ -59,7 +59,7 @@ namespace macbingen
             count = this.numericUpDown6.Value;
 
             titleList.Add("MAC Address");
-             titleList.Add("Username");
+            titleList.Add("Username");
             titleList.Add("Password");
             titleList.Add("WirelessKey");
             titleList.Add("PPPoE Username");
@@ -79,12 +79,17 @@ namespace macbingen
             IRow row;
             ICell cell;
 
+            ICellStyle s = workbook.CreateCellStyle();
+            s.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Aqua.Index;
+            s.FillPattern = FillPattern.SolidForeground;
+
             row = sheet.CreateRow(0);
             int tempcount = 0;
             foreach(var title in titleList)
             {
                 cell = row.CreateCell(tempcount);
                 cell.SetCellValue(title);
+                cell.CellStyle = s;
                 sheet.SetColumnWidth(tempcount, 20 * 256);
                 tempcount++;
             }
@@ -134,7 +139,15 @@ namespace macbingen
             workbook.Write(sw);
             
             sw.Close();
-            MessageBox.Show("Generate success in" + filePath);
+            //MessageBox.Show("Generate success in" + filePath);
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+            }
+            catch (IOException error)
+            {
+                MessageBox.Show("ERROR 13:" + error.Message);
+            }
 
         }
 
