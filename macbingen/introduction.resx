@@ -117,19 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label1.Text" xml:space="preserve">
-    <value>1，Fill out the form, choose what you need to generate automatically.
-2，Click “Create new Template file”to generate the template file.
-3，Edit your template file and save, close Excel.
-4，Click “Load Template file”to import your template file.
-5，Click“Generate bin file”and the MAC.bin will be generated automatically.</value>
-  </data>
   <data name="label2.Text" xml:space="preserve">
-    <value>PIN: PIN number
-Username: The default username of web login
-Password: The default username of web login
-PPPoE Username: The default username of PPPoE
-PPPoE Password: The default password of PPPoE
-Generate Flag(in template file): 1(don`t generate) 0(generate)</value>
+    <value>Wireless Parameters:
+SSID of 2.4G, SSID of 5G, SSID of guest network
+
+Internet Parameters:
+PPPoE username, PPPoE password
+Static ip address, Netmask, Gateway, DNS Server
+
+Login Parameters:
+Login Username, Login Password
+
+</value>
   </data>
 </root>

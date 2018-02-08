@@ -96,31 +96,31 @@ namespace macbingen
               
                 if(isUsername)
                 {
-                    cell = row.CreateCell(2);
+                    cell = row.CreateCell(1);
                     cell.SetCellValue(getRandomizer(Convert.ToInt32(usernameLength), true, true, true, false));
                 }
                 
                 if(isPassword)
                 {
-                    cell = row.CreateCell(3);
+                    cell = row.CreateCell(2);
                     cell.SetCellValue(getRandomizer(Convert.ToInt32(passwordLength), true, true, true, false));
                 }
 
                 if(isPppoeUsername)
                 {
-                    cell = row.CreateCell(5);
+                    cell = row.CreateCell(4);
                     cell.SetCellValue(getRandomizer(Convert.ToInt32(pppoeUsernameLength), true, true, true, false));
                 }
                  
                 if(isPppoePassword)
                 {
-                    cell = row.CreateCell(6);
+                    cell = row.CreateCell(5);
                     cell.SetCellValue(getRandomizer(Convert.ToInt32(pppoePasswordLength), true, true, true, false));
                 }
 
                 if(true)
                 {
-                    cell = row.CreateCell(15);
+                    cell = row.CreateCell(14);
                     cell.SetCellValue(0);
                 }
             }
@@ -273,7 +273,6 @@ namespace macbingen
                     int index = 0;
                     string macAddress;
                     string macbinPath;
-                    string pin;
                     string username;
                     string password;
                     string wirelesskey;
@@ -295,9 +294,9 @@ namespace macbingen
                         index++;
                     }
 
-                    if (!Directory.Exists(Application.StartupPath + "/output"))
+                    if (!Directory.Exists(outputpath))
                     {
-                        Directory.CreateDirectory(Application.StartupPath + "/output");
+                        Directory.CreateDirectory(outputpath);
                     }
 
                     for (index = 1; index < Convert.ToInt32(count); index++)
@@ -306,7 +305,7 @@ namespace macbingen
 
                         ICell cell = row.GetCell(0);
                         macAddress = cell.ToString();
-                        macbinPath = Application.StartupPath + "/output/" + macAddress + ".bin";
+                        macbinPath = outputpath + "/" + macAddress + ".bin";
 
                         if (string.IsNullOrWhiteSpace(macAddress))
                         {
@@ -317,106 +316,97 @@ namespace macbingen
                         StreamWriter writer = new StreamWriter(macbinStream);
 
                         cell = row.GetCell(1);
-
-                        if (cell != null)
-                        {
-                            pin = cell.ToString();
-                            writer.WriteLine("pin:" + pin);
-                            //MessageBox.Show(pin);
-                        }
-
-                        cell = row.GetCell(2);
                         if (cell != null)
                         {
                             username = cell.ToString();
                             writer.WriteLine("username:" + username);
                         }
 
-                        cell = row.GetCell(3);
+                        cell = row.GetCell(2);
                         if (cell != null)
                         {
                             password = cell.ToString();
                             writer.WriteLine("password:" + password);
                         }
 
-                        cell = row.GetCell(4);
+                        cell = row.GetCell(3);
                         if (cell != null)
                         {
                             wirelesskey = cell.ToString();
                             writer.WriteLine("wirelesskey:" + wirelesskey);
                         }
 
-                        cell = row.GetCell(5);
+                        cell = row.GetCell(4);
                         if (cell != null)
                         {
                             pppoeusername = cell.ToString();
                             writer.WriteLine("PPPOE4_username:" + pppoeusername);
                         }
 
-                        cell = row.GetCell(6);
+                        cell = row.GetCell(5);
                         if (cell != null)
                         {
                             pppoepassword = cell.ToString();
                             writer.WriteLine("PPPOE4_password:" + pppoepassword);
                         }
 
-                        cell = row.GetCell(7);
+                        cell = row.GetCell(6);
                         if (cell != null)
                         {
                             ipaddress = cell.ToString();
                             writer.WriteLine("static_IP4:" + ipaddress);
                         }
 
-                        cell = row.GetCell(8);
+                        cell = row.GetCell(7);
                         if (cell != null)
                         {
                             mask = cell.ToString();
                             writer.WriteLine("static_Mask4:" + mask);
                         }
 
-                        cell = row.GetCell(9);
+                        cell = row.GetCell(8);
                         if (cell != null)
                         {
                             gateway = cell.ToString();
                             writer.WriteLine("static_GW4:" + gateway);
                         }
 
-                        cell = row.GetCell(10);
+                        cell = row.GetCell(9);
                         if (cell != null)
                         {
                             dns = cell.ToString();
                             writer.WriteLine("static_DNS4:" + dns);
                         }
 
-                        cell = row.GetCell(11);
+                        cell = row.GetCell(10);
                         if (cell != null)
                         {
                             ssid2 = cell.ToString();
                             writer.WriteLine("SSID_2G_0:" + ssid2);
                         }
 
-                        cell = row.GetCell(12);
+                        cell = row.GetCell(11);
                         if (cell != null)
                         {
                             ssid2guest = cell.ToString();
                             writer.WriteLine("SSID_2G_1:" + ssid2guest);
                         }
 
-                        cell = row.GetCell(13);
+                        cell = row.GetCell(12);
                         if (cell != null)
                         {
                             ssid5 = cell.ToString();
                             writer.WriteLine("SSID_5G_0:" + ssid5);
                         }
 
-                        cell = row.GetCell(14);
+                        cell = row.GetCell(13);
                         if (cell != null)
                         {
                             ssid5guest = cell.ToString();
                             writer.WriteLine("SSID_5G_1:" + ssid5guest);
                         }
 
-                        cell = row.GetCell(15);
+                        cell = row.GetCell(14);
                         if (cell != null)
                         {
                             string flag = cell.ToString();
